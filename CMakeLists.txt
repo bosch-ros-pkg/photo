@@ -114,7 +114,7 @@ add_executable(test_photo src/test_photo/test_photo.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(photo_node photo_generate_messages_cpp)
+add_dependencies(photo_node photo_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(photo2
