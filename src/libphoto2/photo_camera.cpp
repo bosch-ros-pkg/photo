@@ -220,7 +220,7 @@ int photo_camera::photo_camera_find_widget_by_name( std::string name, CameraWidg
  * #include <boost/algorithm/string.hpp>
  * boost::iequals( s1, s2 );
  */
-bool photo_camera::photo_camera_check_toggle_value( std::string value_in, bool* value_out )
+bool photo_camera::photo_camera_check_toggle_value( std::string value_in, int* value_out )
 {
   std::string toggle_positive[] = { "on", "yes", "true", "ON", "YES", "TRUE"};
   std::string toggle_negative[] = { "off", "no", "false", "OFF", "NO", "FALSE" };
@@ -229,12 +229,12 @@ bool photo_camera::photo_camera_check_toggle_value( std::string value_in, bool* 
   // first check numeric values: "1" and "0"
   if( value_in.compare( "0" ) == 0 )
   {
-    *value_out = false;
+    *value_out = 0;
     return true;
   }
   if( value_in.compare( "0" ) == 0 )
   {
-    *value_out = true;
+    *value_out = 1;
     return true;
   }
 
@@ -243,7 +243,7 @@ bool photo_camera::photo_camera_check_toggle_value( std::string value_in, bool* 
   {
     if( value_in.compare( toggle_positive[i] ) == 0 )
     {
-      *value_out = true;
+      *value_out = 1;
       return true;
     }
   }
@@ -253,7 +253,7 @@ bool photo_camera::photo_camera_check_toggle_value( std::string value_in, bool* 
   {
     if( value_in.compare( toggle_negative[i] ) == 0 )
     {
-      *value_out = false;
+      *value_out = 0;
       return true;
     }
   }
@@ -336,7 +336,7 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
     break;
 
   case GP_WIDGET_TOGGLE: // int
-    bool tog;
+    int tog;
     if( photo_camera_check_toggle_value( value, &tog ) == false )
     {
       gp_context_error(context_, "The passed value %s is not a valid toggle value.", value.c_str() );

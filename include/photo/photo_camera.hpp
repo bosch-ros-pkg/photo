@@ -97,7 +97,7 @@ public:
   int photo_camera_find_widget_by_name( std::string param, CameraWidget **child, CameraWidget **rootconfig );
 
 private:
-  bool photo_camera_check_toggle_value( std::string value_in, bool* value_out );
+  bool photo_camera_check_toggle_value( std::string value_in, int* value_out );
 };
 
 
