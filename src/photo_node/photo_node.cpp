@@ -127,7 +127,7 @@ public:
       resp.value = value;
     }
     photo_mutex_.unlock();
-    delete value;
+    delete[] value;
     return error_code;
   }
 
