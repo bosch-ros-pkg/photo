@@ -141,7 +141,7 @@ bool photo_camera_list::lookupPortInfo( const std::string port_name, GPPortInfo*
     }
     return false;
   }
-  
+
   // Get the port information from from the information list
   if( gp_port_info_list_get_info( port_info_list_, list_index, port_info ) != GP_OK )
   {
@@ -189,7 +189,7 @@ bool photo_camera_list::lookupAbilities( const std::string model_name, CameraAbi
 bool photo_camera_list::autodetect( GPContext* context )
 {
   ssize_t port_count = 0;
- 
+
   // Create a new list of cameras
   if( gp_list_new( &camera_list_ ) != GP_OK )
   {
@@ -240,8 +240,8 @@ bool photo_camera_list::filterCameraList( GPContext* context, const std::string 
     gp_list_free( working_list );
     return false;
   }
-  
- 
+
+
   count = gp_list_count( working_list );
   if( count < GP_OK )
   {
@@ -249,7 +249,7 @@ bool photo_camera_list::filterCameraList( GPContext* context, const std::string 
     gp_list_free( working_list );
     return false;
   }
-  
+
   // Clear camera_list_ for appending
   if( gp_list_reset( camera_list_ ) != GP_OK )
   {
@@ -270,7 +270,7 @@ bool photo_camera_list::filterCameraList( GPContext* context, const std::string 
       gp_list_append( camera_list_, name, value );
     }
   }
-  
+
   gp_list_free( working_list );
 
   return true;

@@ -70,7 +70,7 @@ public:
     camera_(),
     image_()
   {
-    
+
     ros::NodeHandle private_nh("~");
     GPContext* private_context;
 
@@ -96,7 +96,7 @@ public:
       private_nh.shutdown();
       return;
     }
-    
+
     // ***** Start Services *****
     set_config_srv_ = private_nh.advertiseService("set_config", &PhotoNode::setConfig, this);
     get_config_srv_ = private_nh.advertiseService("get_config", &PhotoNode::getConfig, this);

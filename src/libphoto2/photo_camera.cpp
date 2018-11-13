@@ -125,11 +125,11 @@ bool photo_camera::photo_camera_open( photo_camera_list* list, const std::string
 
 bool photo_camera::photo_camera_open( photo_camera_list* list, int n )
 {
-  const char *name, *value; 
+  const char *name, *value;
 
   gp_list_get_name( list->getCameraList(), n, &name);
   gp_list_get_value( list->getCameraList(), n, &value);
- 
+
   std::cout << "Opening camera " << n << " by name (" << name << ") and value (" << value << ")" << std::endl;
 
   if( photo_camera_open( list, name, value ) == false )
@@ -199,7 +199,7 @@ int photo_camera::photo_camera_find_widget_by_name( std::string name, CameraWidg
   }
   name = name.substr( found_index, name.length() - 1 );
 
-  // Find child using 
+  // Find child using
   if( gp_widget_get_child_by_name( *root, name.c_str(), child ) == GP_OK )
   {
     return GP_OK;
@@ -291,7 +291,7 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
     gp_widget_free( root );
     return false;
   }
-    
+
   switch( type )
   {
 
@@ -351,13 +351,13 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
       return false;
     }
     break;
-  
+
   case GP_WIDGET_DATE: // int
   {
     int time = -1;
 #ifdef HAVE_STRPTIME
     struct tm xtm;
-    
+
     if( strptime( value.c_str(), "%c", &xtm ) || strptime( value.c_str(), "%Ec", &xtm ) )
     {
       time = mktime( &xtm );
@@ -368,8 +368,8 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
       if( !sscanf( value.c_str(), "%d", &time ) )
       {
         gp_context_error( context_, "The passed value %s is neither a valid time nor an integer.", value.c_str() );
-	gp_widget_free( root );
-	return false;
+        gp_widget_free( root );
+        return false;
       }
     }
     if( gp_widget_set_value(child, &time) != GP_OK )
@@ -399,13 +399,13 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
       const char *choice;
       if( gp_widget_get_choice( child, i, &choice ) == GP_OK )
       {
-	if( value.compare( choice ) == 0 )
-	{
-	  if( gp_widget_set_value( child, value.c_str() ) == GP_OK )
-	  {
-	    break;
-	  }
-	}
+        if( value.compare( choice ) == 0 )
+        {
+          if( gp_widget_set_value( child, value.c_str() ) == GP_OK )
+          {
+            break;
+          }
+        }
       }
     }
     // attemt a different method for setting a radio button
@@ -415,18 +415,18 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
       {
         const char *choice;
         if( gp_widget_get_choice( child, i, &choice ) == GP_OK )
-	{
-	  if( gp_widget_set_value( child, choice ) == GP_OK )
-	  {
-	    break;
-	  }
-	}
+        {
+          if( gp_widget_set_value( child, choice ) == GP_OK )
+          {
+            break;
+          }
+        }
       }
     }
     gp_context_error( context_, "Choice %s not found within list of choices.", value.c_str() );
     gp_widget_free( root );
     return false;
-  
+
   case GP_WIDGET_WINDOW:
   case GP_WIDGET_SECTION:
   case GP_WIDGET_BUTTON:
@@ -491,7 +491,7 @@ bool photo_camera::photo_camera_get_config( std::string param, char** value )
     }
     *value = txt;
     break;
- 
+
   case GP_WIDGET_RANGE: // float
     float f, t,b,s;
     if( gp_widget_get_range( child, &b, &t, &s ) != GP_OK )

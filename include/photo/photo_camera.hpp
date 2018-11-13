@@ -60,9 +60,9 @@ private:
   CameraAbilities abilities_;
   enum photo_mode mode_;
 
-  
+
 public:
-  
+
   photo_camera( void );
   ~photo_camera( void );
 
@@ -75,20 +75,20 @@ public:
 
   //* Open a connection the photo_camera of 'model' on port 'port'.
   bool photo_camera_open( photo_camera_list* list, const std::string model_name, std::string port_name );
-  
+
   //* Close the photo_camera
   bool photo_camera_close( void );
-  
+
 
   //* set a photo_camera parameter
   bool photo_camera_set_config( std::string param, std::string value );
-  
+
   //* get a photo_camera parameter
   bool photo_camera_get_config( std::string, char** value);
-  
+
   //* capture an image
   bool photo_camera_capture( photo_image* image );
-  
+
   //* capture an image to file
   bool photo_camera_capture_to_file( std::string filename );
 
