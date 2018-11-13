@@ -38,31 +38,17 @@
 
 #include "photo/photo_reporter.hpp"
 
-//photo_reporter::photo_reporter( void )
-//{
-//}
-//photo_reporter::~photo_reporter( void )
-//{
-//}
-
-void photo_reporter::contextError( GPContext *context, const char *format, va_list args, void *data )
+void photo_reporter::contextError( GPContext *context, const char *error_string, void *data )
 {
-  char error_string[1024]; // Maximum size of error message.
-
-  vsnprintf( error_string, 1024, format, args );
-  //va_end( args );
-
-  std::cerr << std::endl << "photo_reporter: Context error " << std::endl
-	    << error_string << std::endl;
+  (void)context;
+  (void)data;
+  std::cerr << "\nphoto_reporter: Context error \n" << error_string << std::endl;
 }
 
-void photo_reporter::contextStatus( GPContext *context, const char *format, va_list args, void *data )
+void photo_reporter::contextStatus( GPContext *context, const char *status_string, void *data )
 {
-  char status_string[1024]; // Maximum size of status message.
-
-  vsnprintf( status_string, 1024, format, args );
-  //va_end( args );
-
+  (void)context;
+  (void)data;
   std::cout << "photo_reporter: Status " << status_string << std::endl;
 }
 

@@ -35,6 +35,7 @@
  *********************************************************************/
 
 #include <iostream>
+#include <sys/types.h>
 
 #include "photo/photo_reporter.hpp"
 

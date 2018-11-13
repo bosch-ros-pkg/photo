@@ -36,6 +36,7 @@
 
 #include <cstdio>  // sscanf, printf, etc.
 #include <fcntl.h> // C file I/O
+#include <unistd.h>
 #include <cstdlib>
 #include <cstring>
 
