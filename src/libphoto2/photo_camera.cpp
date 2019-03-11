@@ -76,7 +76,8 @@ GPContext* photo_camera::photo_camera_create_context( void )
 }
 
 
-bool photo_camera::photo_camera_open( photo_camera_list* list, const std::string model_name, const std::string port_name )
+bool photo_camera::photo_camera_open( photo_camera_list* list, const std::string& model_name,
+                                      const std::string& port_name )
 {
   // Create a context if necessary
   if( context_ == NULL )
@@ -173,7 +174,8 @@ bool photo_camera::photo_camera_close( void )
 
 
 
-int photo_camera::photo_camera_find_widget_by_name( std::string name, CameraWidget **child, CameraWidget **root)
+int photo_camera::photo_camera_find_widget_by_name( std::string name, CameraWidget **child,
+                                                    CameraWidget **root)
  {
   int error_code;
 
@@ -239,7 +241,7 @@ int photo_camera::photo_camera_find_widget_by_name( std::string name, CameraWidg
  * #include <boost/algorithm/string.hpp>
  * boost::iequals( s1, s2 );
  */
-bool photo_camera::photo_camera_check_toggle_value( std::string value_in, int* value_out )
+bool photo_camera::photo_camera_check_toggle_value( const std::string& value_in, int* value_out )
 {
   std::string toggle_positive[] = { "on", "yes", "true", "ON", "YES", "TRUE"};
   std::string toggle_negative[] = { "off", "no", "false", "OFF", "NO", "FALSE" };
@@ -281,7 +283,7 @@ bool photo_camera::photo_camera_check_toggle_value( std::string value_in, int* v
 
 
 
-bool photo_camera::photo_camera_set_config( std::string param, std::string value )
+bool photo_camera::photo_camera_set_config( const std::string& param, const std::string& value )
 {
   CameraWidget *root, *child;
   int error_code;
@@ -471,7 +473,7 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
 
 
 
-bool photo_camera::photo_camera_get_config( std::string param, char** value )
+bool photo_camera::photo_camera_get_config( const std::string& param, char** value )
 {
   CameraWidget *root, *child;
   const char *label;
@@ -577,7 +579,7 @@ bool photo_camera::photo_camera_get_config( std::string param, char** value )
 }
 
 
-bool photo_camera::photo_camera_capture_to_file( std::string filename )
+bool photo_camera::photo_camera_capture_to_file( const std::string& filename )
 {
   int fd, error_code;
   CameraFile *photo_file;

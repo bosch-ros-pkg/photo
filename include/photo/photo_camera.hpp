@@ -74,30 +74,32 @@ public:
   bool photo_camera_open( photo_camera_list* list, int n );
 
   //* Open a connection the photo_camera of 'model' on port 'port'.
-  bool photo_camera_open( photo_camera_list* list, const std::string model_name, std::string port_name );
+  bool photo_camera_open( photo_camera_list* list, const std::string& model_name,
+                          const std::string& port_name );
 
   //* Close the photo_camera
   bool photo_camera_close( void );
 
 
   //* set a photo_camera parameter
-  bool photo_camera_set_config( std::string param, std::string value );
+  bool photo_camera_set_config( const std::string& param, const std::string& value );
 
   //* get a photo_camera parameter
-  bool photo_camera_get_config( std::string, char** value);
+  bool photo_camera_get_config( const std::string&, char** value);
 
   //* capture an image
   bool photo_camera_capture( photo_image* image );
 
   //* capture an image to file
-  bool photo_camera_capture_to_file( std::string filename );
+  bool photo_camera_capture_to_file( const std::string& filename );
 
 
 
-  int photo_camera_find_widget_by_name( std::string param, CameraWidget **child, CameraWidget **rootconfig );
+  int photo_camera_find_widget_by_name( std::string name, CameraWidget **child,
+                                        CameraWidget **rootconfig );
 
 private:
-  bool photo_camera_check_toggle_value( std::string value_in, int* value_out );
+  bool photo_camera_check_toggle_value( const std::string& value_in, int* value_out );
 };
 
 

@@ -126,7 +126,7 @@ bool photo_camera_list::loadAbilities( GPContext* context )
 
 
 
-bool photo_camera_list::lookupPortInfo( const std::string port_name, GPPortInfo* port_info )
+bool photo_camera_list::lookupPortInfo( const std::string& port_name, GPPortInfo* port_info )
 {
   int list_index = 0;
 
@@ -153,7 +153,7 @@ bool photo_camera_list::lookupPortInfo( const std::string port_name, GPPortInfo*
 }
 
 
-bool photo_camera_list::lookupAbilities( const std::string model_name, CameraAbilities* abilities )
+bool photo_camera_list::lookupAbilities( const std::string& model_name, CameraAbilities* abilities )
 {
   int list_index = 0;
 
@@ -220,7 +220,7 @@ bool photo_camera_list::autodetect( GPContext* context )
 
 
 
-bool photo_camera_list::filterCameraList( GPContext* context, const std::string match_string )
+bool photo_camera_list::filterCameraList( GPContext* context, const std::string& match_string )
 {
   CameraList *working_list = NULL;
   const char *name, *value;

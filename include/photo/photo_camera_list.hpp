@@ -58,7 +58,7 @@ public:
   GPPortInfoList* getPortInfoList( void );
   CameraAbilitiesList* getAbilitiesList( void );
 
-  bool filterCameraList( GPContext* context, const std::string match_string );
+  bool filterCameraList( GPContext* context, const std::string& match_string );
 
 
   //* Autodetect all photo_cameras connected to the system
@@ -68,9 +68,9 @@ public:
   bool loadAbilities( GPContext* context );
 
   //* Look up the port information for the port 'port_name'
-  bool lookupPortInfo( const std::string port_name, GPPortInfo* port_info );
+  bool lookupPortInfo( const std::string& port_name, GPPortInfo* port_info );
   //* Look up abilities for the camera model 'model_name'
-  bool lookupAbilities( const std::string model_name, CameraAbilities* abilities );
+  bool lookupAbilities( const std::string& model_name, CameraAbilities* abilities );
 
 
 

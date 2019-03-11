@@ -52,12 +52,13 @@ void photo_reporter::contextStatus( GPContext *context, const char *status_strin
   std::cout << "photo_reporter: Status " << status_string << std::endl;
 }
 
-void photo_reporter::error( std::string function_name )
+void photo_reporter::error( const std::string& function_name )
 {
   std::cerr << "photo_reporter: Error executing function '" << function_name << "'." << std::endl;
 }
 
-void photo_reporter::error( std::string function_name, std::string additional_message )
+void photo_reporter::error( const std::string& function_name,
+                            const std::string& additional_message )
 {
   error( function_name );
   std::cerr << additional_message << std::endl;

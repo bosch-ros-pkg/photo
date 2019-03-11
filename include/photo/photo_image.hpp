@@ -67,14 +67,14 @@ public:
    * This function is a debugging function for use replacing photo_image acquisition using a photo_camera.
    * It can only read 24-bit RGB images via OpenCV. It may be extended to handle grayscale and alpha channels in the future.
    */
-  bool photo_image_read( std::string filename );
+  bool photo_image_read( const std::string& filename );
 
   //* Write a photo_image to filesystem
   /*
    * This function is a debugging function for use replacing photo_image acquisition using a photo_camera.
    * It can only write 24-bit RGB images via OpenCV. It may be extended to handle grayscale and alpha channels in the future.
    */
-  bool photo_image_write( std::string filename );
+  bool photo_image_write( const std::string& filename );
 };
 
 #endif // __PHOTO_IMAGE__
