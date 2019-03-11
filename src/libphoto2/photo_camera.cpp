@@ -56,7 +56,11 @@ photo_camera::photo_camera( void ) :
 
 photo_camera::~photo_camera( void )
 {
-  gp_camera_unref( camera_ ); //delete camera_;
+  if( camera_ )
+  {
+    gp_camera_unref( camera_ ); //delete camera_;
+  }
+
   gp_context_unref( context_ ); //delete context_;
 }
 
@@ -125,10 +129,22 @@ bool photo_camera::photo_camera_open( photo_camera_list* list, const std::string
 
 bool photo_camera::photo_camera_open( photo_camera_list* list, int n )
 {
-  const char *name, *value;
+  const char *name = NULL;
+  const char *value = NULL;
 
-  gp_list_get_name( list->getCameraList(), n, &name);
-  gp_list_get_value( list->getCameraList(), n, &value);
+  gp_list_get_name( list->getCameraList(), n, &name );
+  if( name == NULL )
+  {
+    photo_reporter::error( "could not get name of camera" );
+    return false;
+  }
+
+  gp_list_get_value( list->getCameraList(), n, &value );
+  if( value == NULL )
+  {
+    photo_reporter::error( "could not get value of camera" );
+    return false;
+  }
 
   std::cout << "Opening camera " << n << " by name (" << name << ") and value (" << value << ")" << std::endl;
 
@@ -143,10 +159,13 @@ bool photo_camera::photo_camera_open( photo_camera_list* list, int n )
 
 bool photo_camera::photo_camera_close( void )
 {
-  if( gp_camera_exit( camera_, context_ ) != GP_OK )
+  if( camera_ )
   {
-    photo_reporter::error( "gp_camera_exit()", "Could not close photo_camera.");
-    return false;
+    if( gp_camera_exit( camera_, context_ ) != GP_OK )
+    {
+      photo_reporter::error( "gp_camera_exit()", "Could not close photo_camera.");
+      return false;
+    }
   }
   return true;
 }
