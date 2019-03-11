@@ -223,7 +223,8 @@ bool photo_camera_list::autodetect( GPContext* context )
 bool photo_camera_list::filterCameraList( GPContext* context, const std::string& match_string )
 {
   CameraList *working_list = NULL;
-  const char *name, *value;
+  const char *name = NULL;
+  const char *value = NULL;
   int count = 0;
 
   if( gp_list_new( &working_list ) != GP_OK )
@@ -261,11 +262,10 @@ bool photo_camera_list::filterCameraList( GPContext* context, const std::string&
   // Filter out the generic 'usb:' entry
   for( int i = 0; i < count; i++ )
   {
-
     gp_list_get_name( working_list, i, &name );
     gp_list_get_value( working_list, i, &value );
 
-    if( match_string.compare( value ) != 0 )
+    if( name && value && match_string.compare( value ) != 0 )
     {
       gp_list_append( camera_list_, name, value );
     }
@@ -275,4 +275,3 @@ bool photo_camera_list::filterCameraList( GPContext* context, const std::string&
 
   return true;
 }
-
