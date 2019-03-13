@@ -36,7 +36,7 @@
   <run_depend>std_msgs</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>self_test</run_depend>
-  <run_depend>libgphoto2</run_depend>
+  <run_depend>libgphoto-dev</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
