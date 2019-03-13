@@ -2,6 +2,11 @@
 Changelog for package photo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* update rosdep keys for libgphoto2
+* Contributors: root
+
 1.0.1 (2019-03-13)
 ------------------
 * Melodic devel (`#4 <https://github.com/bosch-ros-pkg/photo/issues/4>`_)
