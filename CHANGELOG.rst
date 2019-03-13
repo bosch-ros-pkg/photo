@@ -2,8 +2,8 @@
 Changelog for package photo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.1 (2019-03-13)
+------------------
 * Melodic devel (`#4 <https://github.com/bosch-ros-pkg/photo/issues/4>`_)
   * Make it compile on Ubuntu Bionic
   Changes from code-iai fork: https://github.com/code-iai/iai_photo
