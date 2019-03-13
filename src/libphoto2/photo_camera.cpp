@@ -36,6 +36,7 @@
 
 #include <cstdio>  // sscanf, printf, etc.
 #include <fcntl.h> // C file I/O
+#include <unistd.h>
 #include <cstdlib>
 #include <cstring>
 
@@ -55,7 +56,11 @@ photo_camera::photo_camera( void ) :
 
 photo_camera::~photo_camera( void )
 {
-  gp_camera_unref( camera_ ); //delete camera_;
+  if( camera_ )
+  {
+    gp_camera_unref( camera_ ); //delete camera_;
+  }
+
   gp_context_unref( context_ ); //delete context_;
 }
 
@@ -71,7 +76,8 @@ GPContext* photo_camera::photo_camera_create_context( void )
 }
 
 
-bool photo_camera::photo_camera_open( photo_camera_list* list, const std::string model_name, const std::string port_name )
+bool photo_camera::photo_camera_open( photo_camera_list* list, const std::string& model_name,
+                                      const std::string& port_name )
 {
   // Create a context if necessary
   if( context_ == NULL )
@@ -124,11 +130,23 @@ bool photo_camera::photo_camera_open( photo_camera_list* list, const std::string
 
 bool photo_camera::photo_camera_open( photo_camera_list* list, int n )
 {
-  const char *name, *value; 
+  const char *name = NULL;
+  const char *value = NULL;
 
-  gp_list_get_name( list->getCameraList(), n, &name);
-  gp_list_get_value( list->getCameraList(), n, &value);
- 
+  gp_list_get_name( list->getCameraList(), n, &name );
+  if( name == NULL )
+  {
+    photo_reporter::error( "could not get name of camera" );
+    return false;
+  }
+
+  gp_list_get_value( list->getCameraList(), n, &value );
+  if( value == NULL )
+  {
+    photo_reporter::error( "could not get value of camera" );
+    return false;
+  }
+
   std::cout << "Opening camera " << n << " by name (" << name << ") and value (" << value << ")" << std::endl;
 
   if( photo_camera_open( list, name, value ) == false )
@@ -142,10 +160,13 @@ bool photo_camera::photo_camera_open( photo_camera_list* list, int n )
 
 bool photo_camera::photo_camera_close( void )
 {
-  if( gp_camera_exit( camera_, context_ ) != GP_OK )
+  if( camera_ )
   {
-    photo_reporter::error( "gp_camera_exit()", "Could not close photo_camera.");
-    return false;
+    if( gp_camera_exit( camera_, context_ ) != GP_OK )
+    {
+      photo_reporter::error( "gp_camera_exit()", "Could not close photo_camera.");
+      return false;
+    }
   }
   return true;
 }
@@ -153,7 +174,8 @@ bool photo_camera::photo_camera_close( void )
 
 
 
-int photo_camera::photo_camera_find_widget_by_name( std::string name, CameraWidget **child, CameraWidget **root)
+int photo_camera::photo_camera_find_widget_by_name( std::string name, CameraWidget **child,
+                                                    CameraWidget **root)
  {
   int error_code;
 
@@ -198,7 +220,7 @@ int photo_camera::photo_camera_find_widget_by_name( std::string name, CameraWidg
   }
   name = name.substr( found_index, name.length() - 1 );
 
-  // Find child using 
+  // Find child using
   if( gp_widget_get_child_by_name( *root, name.c_str(), child ) == GP_OK )
   {
     return GP_OK;
@@ -219,7 +241,7 @@ int photo_camera::photo_camera_find_widget_by_name( std::string name, CameraWidg
  * #include <boost/algorithm/string.hpp>
  * boost::iequals( s1, s2 );
  */
-bool photo_camera::photo_camera_check_toggle_value( std::string value_in, bool* value_out )
+bool photo_camera::photo_camera_check_toggle_value( const std::string& value_in, int* value_out )
 {
   std::string toggle_positive[] = { "on", "yes", "true", "ON", "YES", "TRUE"};
   std::string toggle_negative[] = { "off", "no", "false", "OFF", "NO", "FALSE" };
@@ -228,12 +250,12 @@ bool photo_camera::photo_camera_check_toggle_value( std::string value_in, bool* 
   // first check numeric values: "1" and "0"
   if( value_in.compare( "0" ) == 0 )
   {
-    *value_out = false;
+    *value_out = 0;
     return true;
   }
   if( value_in.compare( "0" ) == 0 )
   {
-    *value_out = true;
+    *value_out = 1;
     return true;
   }
 
@@ -242,7 +264,7 @@ bool photo_camera::photo_camera_check_toggle_value( std::string value_in, bool* 
   {
     if( value_in.compare( toggle_positive[i] ) == 0 )
     {
-      *value_out = true;
+      *value_out = 1;
       return true;
     }
   }
@@ -252,7 +274,7 @@ bool photo_camera::photo_camera_check_toggle_value( std::string value_in, bool* 
   {
     if( value_in.compare( toggle_negative[i] ) == 0 )
     {
-      *value_out = false;
+      *value_out = 0;
       return true;
     }
   }
@@ -261,7 +283,7 @@ bool photo_camera::photo_camera_check_toggle_value( std::string value_in, bool* 
 
 
 
-bool photo_camera::photo_camera_set_config( std::string param, std::string value )
+bool photo_camera::photo_camera_set_config( const std::string& param, const std::string& value )
 {
   CameraWidget *root, *child;
   int error_code;
@@ -290,7 +312,7 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
     gp_widget_free( root );
     return false;
   }
-    
+
   switch( type )
   {
 
@@ -335,7 +357,7 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
     break;
 
   case GP_WIDGET_TOGGLE: // int
-    bool tog;
+    int tog;
     if( photo_camera_check_toggle_value( value, &tog ) == false )
     {
       gp_context_error(context_, "The passed value %s is not a valid toggle value.", value.c_str() );
@@ -350,13 +372,13 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
       return false;
     }
     break;
-  
+
   case GP_WIDGET_DATE: // int
   {
     int time = -1;
 #ifdef HAVE_STRPTIME
     struct tm xtm;
-    
+
     if( strptime( value.c_str(), "%c", &xtm ) || strptime( value.c_str(), "%Ec", &xtm ) )
     {
       time = mktime( &xtm );
@@ -367,8 +389,8 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
       if( !sscanf( value.c_str(), "%d", &time ) )
       {
         gp_context_error( context_, "The passed value %s is neither a valid time nor an integer.", value.c_str() );
-	gp_widget_free( root );
-	return false;
+        gp_widget_free( root );
+        return false;
       }
     }
     if( gp_widget_set_value(child, &time) != GP_OK )
@@ -398,13 +420,13 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
       const char *choice;
       if( gp_widget_get_choice( child, i, &choice ) == GP_OK )
       {
-	if( value.compare( choice ) == 0 )
-	{
-	  if( gp_widget_set_value( child, value.c_str() ) == GP_OK )
-	  {
-	    break;
-	  }
-	}
+        if( value.compare( choice ) == 0 )
+        {
+          if( gp_widget_set_value( child, value.c_str() ) == GP_OK )
+          {
+            break;
+          }
+        }
       }
     }
     // attemt a different method for setting a radio button
@@ -414,18 +436,18 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
       {
         const char *choice;
         if( gp_widget_get_choice( child, i, &choice ) == GP_OK )
-	{
-	  if( gp_widget_set_value( child, choice ) == GP_OK )
-	  {
-	    break;
-	  }
-	}
+        {
+          if( gp_widget_set_value( child, choice ) == GP_OK )
+          {
+            break;
+          }
+        }
       }
     }
     gp_context_error( context_, "Choice %s not found within list of choices.", value.c_str() );
     gp_widget_free( root );
     return false;
-  
+
   case GP_WIDGET_WINDOW:
   case GP_WIDGET_SECTION:
   case GP_WIDGET_BUTTON:
@@ -451,7 +473,7 @@ bool photo_camera::photo_camera_set_config( std::string param, std::string value
 
 
 
-bool photo_camera::photo_camera_get_config( std::string param, char** value )
+bool photo_camera::photo_camera_get_config( const std::string& param, char** value )
 {
   CameraWidget *root, *child;
   const char *label;
@@ -490,7 +512,7 @@ bool photo_camera::photo_camera_get_config( std::string param, char** value )
     }
     *value = txt;
     break;
- 
+
   case GP_WIDGET_RANGE: // float
     float f, t,b,s;
     if( gp_widget_get_range( child, &b, &t, &s ) != GP_OK )
@@ -557,7 +579,7 @@ bool photo_camera::photo_camera_get_config( std::string param, char** value )
 }
 
 
-bool photo_camera::photo_camera_capture_to_file( std::string filename )
+bool photo_camera::photo_camera_capture_to_file( const std::string& filename )
 {
   int fd, error_code;
   CameraFile *photo_file;

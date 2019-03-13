@@ -35,6 +35,7 @@
  *********************************************************************/
 
 #include <iostream>
+#include <sys/types.h>
 
 #include "photo/photo_reporter.hpp"
 
@@ -125,7 +126,7 @@ bool photo_camera_list::loadAbilities( GPContext* context )
 
 
 
-bool photo_camera_list::lookupPortInfo( const std::string port_name, GPPortInfo* port_info )
+bool photo_camera_list::lookupPortInfo( const std::string& port_name, GPPortInfo* port_info )
 {
   int list_index = 0;
 
@@ -140,7 +141,7 @@ bool photo_camera_list::lookupPortInfo( const std::string port_name, GPPortInfo*
     }
     return false;
   }
-  
+
   // Get the port information from from the information list
   if( gp_port_info_list_get_info( port_info_list_, list_index, port_info ) != GP_OK )
   {
@@ -152,7 +153,7 @@ bool photo_camera_list::lookupPortInfo( const std::string port_name, GPPortInfo*
 }
 
 
-bool photo_camera_list::lookupAbilities( const std::string model_name, CameraAbilities* abilities )
+bool photo_camera_list::lookupAbilities( const std::string& model_name, CameraAbilities* abilities )
 {
   int list_index = 0;
 
@@ -188,7 +189,7 @@ bool photo_camera_list::lookupAbilities( const std::string model_name, CameraAbi
 bool photo_camera_list::autodetect( GPContext* context )
 {
   ssize_t port_count = 0;
- 
+
   // Create a new list of cameras
   if( gp_list_new( &camera_list_ ) != GP_OK )
   {
@@ -219,10 +220,11 @@ bool photo_camera_list::autodetect( GPContext* context )
 
 
 
-bool photo_camera_list::filterCameraList( GPContext* context, const std::string match_string )
+bool photo_camera_list::filterCameraList( GPContext* context, const std::string& match_string )
 {
   CameraList *working_list = NULL;
-  const char *name, *value;
+  const char *name = NULL;
+  const char *value = NULL;
   int count = 0;
 
   if( gp_list_new( &working_list ) != GP_OK )
@@ -239,8 +241,8 @@ bool photo_camera_list::filterCameraList( GPContext* context, const std::string 
     gp_list_free( working_list );
     return false;
   }
-  
- 
+
+
   count = gp_list_count( working_list );
   if( count < GP_OK )
   {
@@ -248,7 +250,7 @@ bool photo_camera_list::filterCameraList( GPContext* context, const std::string 
     gp_list_free( working_list );
     return false;
   }
-  
+
   // Clear camera_list_ for appending
   if( gp_list_reset( camera_list_ ) != GP_OK )
   {
@@ -260,18 +262,16 @@ bool photo_camera_list::filterCameraList( GPContext* context, const std::string 
   // Filter out the generic 'usb:' entry
   for( int i = 0; i < count; i++ )
   {
-
     gp_list_get_name( working_list, i, &name );
     gp_list_get_value( working_list, i, &value );
 
-    if( match_string.compare( value ) != 0 )
+    if( name && value && match_string.compare( value ) != 0 )
     {
       gp_list_append( camera_list_, name, value );
     }
   }
-  
+
   gp_list_free( working_list );
 
   return true;
 }
-

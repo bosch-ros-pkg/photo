@@ -94,7 +94,7 @@ void photo_image::photo_image_set_size( int image_width, int image_height, size_
 }
 
 //* reads an image from filesystem
-bool photo_image::photo_image_read( std::string filename )
+bool photo_image::photo_image_read( const std::string& filename )
 {
   int r, c;
   // Read image from file using OpenCV
@@ -140,7 +140,7 @@ bool photo_image::photo_image_read( std::string filename )
 }
 
 //* writes an image to filesystem
-bool photo_image::photo_image_write( std::string filename )
+bool photo_image::photo_image_write( const std::string& filename )
 {
   int r, c;
 

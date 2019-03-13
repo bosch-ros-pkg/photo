@@ -42,16 +42,11 @@
 
 namespace photo_reporter
 {
-//private:
-//  photo_reporter();
-//  ~photo_reporter();
-//
-//public:
-  void contextError( GPContext* context, const char* format, va_list args, void* data );
-  void contextStatus( GPContext* context, const char* format, va_list args, void* data );
-  void error( std::string function_name );
-  void error( std::string function_name, std::string additional_message );
-
+void contextError( GPContext* context, const char* error_string, void* data );
+void contextStatus( GPContext* context, const char* status_string, void* data );
+void error( const std::string& function_name );
+void error( const std::string& function_name,
+            const std::string& additional_message );
 };
 
 #endif //__PHOTO_REPORTER__
