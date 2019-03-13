@@ -2,8 +2,8 @@
 Changelog for package photo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.2 (2019-03-13)
+------------------
 * update rosdep keys for libgphoto2
 * Contributors: root
 
