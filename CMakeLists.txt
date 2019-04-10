@@ -43,7 +43,7 @@ generate_messages( DEPENDENCIES
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES photo
+  LIBRARIES photo2
   CATKIN_DEPENDS roscpp std_msgs sensor_msgs self_test
   DEPENDS OpenCV gphoto2
 )
