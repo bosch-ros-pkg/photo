@@ -510,7 +510,7 @@ bool photo_camera::photo_camera_get_config( const std::string& param, char** val
     {
       gp_context_error( context_, "Failed to retrieve value of text widget %s.", param.c_str() );
     }
-    *value = txt;
+    sprintf(*value, "%s", txt);
     break;
 
   case GP_WIDGET_RANGE: // float
