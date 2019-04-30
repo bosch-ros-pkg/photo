@@ -9,6 +9,7 @@
 
   <license>BSD</license>
   <maintainer email="Philip.Roan@us.bosch.com">Philip Roan</maintainer>
+  <maintainer email="karsten.knese@us.bosch.com">Karsten Knese</maintainer>
   <author>Benjamin Pitzer</author>
 
   <!-- The *_depend tags are used to specify dependencies -->
