@@ -2,6 +2,21 @@
 Changelog for package photo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix /get-config problem with TEXT type (`#8 <https://github.com/bosch-ros-pkg/photo/issues/8>`_)
+  Fix a problem where, when trying to call the /get-config
+  service on a text field, you would first get wrong data,
+  and on the second call the node would crash.
+* Fix release (`#11 <https://github.com/bosch-ros-pkg/photo/issues/11>`_)
+  * add opencv as dependency
+  * style cleanup
+* Merge pull request `#6 <https://github.com/bosch-ros-pkg/photo/issues/6>`_ from bosch-ros-pkg/Karsten1987-patch-1
+  Make Karsten maintainer
+* Make Karsten maintainer
+* Fixed error in CMakeLists (`#5 <https://github.com/bosch-ros-pkg/photo/issues/5>`_)
+* Contributors: Babis Boloudakis, Karsten Knese, Philip Roan
+
 1.0.2 (2019-03-13)
 ------------------
 * update rosdep keys for libgphoto2
