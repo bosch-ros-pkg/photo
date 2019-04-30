@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>photo</name>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <description>The photo package provides access to digital cameras. Much of the underlying functionality is provide by the gPhoto libary. The system package libgphoto2-2-dev or equivalent is required.></description>
   <url type="website">http://wiki.ros.org/photo</url>
   <url type="repository">https://github.com/bosch-ros-pkg/photo</url>

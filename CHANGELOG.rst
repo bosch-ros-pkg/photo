@@ -2,8 +2,8 @@
 Changelog for package photo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.3 (2019-04-30)
+------------------
 * Fix /get-config problem with TEXT type (`#8 <https://github.com/bosch-ros-pkg/photo/issues/8>`_)
   Fix a problem where, when trying to call the /get-config
   service on a text field, you would first get wrong data,
