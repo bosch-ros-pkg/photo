@@ -51,7 +51,6 @@
 #include "photo/photo_camera.hpp"
 #include "photo/photo_image.hpp"
 
-
 class PhotoNode
 {
 public:
@@ -70,7 +69,6 @@ public:
     camera_(),
     image_()
   {
-
     ros::NodeHandle private_nh("~");
     GPContext* private_context;
 
@@ -80,19 +78,36 @@ public:
     private_context = camera_.photo_camera_create_context();
 
     // autodetect all cameras connected
-    if( camera_list_.autodetect( private_context ) == false )
+    if(!camera_list_.autodetect(private_context))
     {
       ROS_FATAL( "photo_node: Autodetection of cameras failed." );
-      gp_context_unref( private_context );
+      gp_context_unref(private_context);
       private_nh.shutdown();
       return;
     }
 
-    // open camera from camera list
-    if( camera_.photo_camera_open( &camera_list_, 0 ) == false )
+    // Check for camera filtering launch parameters
+    std::string param_key, param_value;
+    private_nh.param<std::string>("config_key", param_key, "");
+    private_nh.param<std::string>("config_value", param_value, "");
+
+    struct timespec tm;
+    clock_gettime(CLOCK_REALTIME, &tm);
+    srand(static_cast<unsigned int>(tm.tv_nsec));
+
+    // Search the camera list
+    int camera_count = gp_list_count(camera_list_.getCameraList());
+    bool found_camera = false;
+
+    for (auto i = 0; i < camera_count && !found_camera; ++i)
     {
-      ROS_FATAL( "photo_node: Could not open camera %d.", 0 );
-      gp_context_unref( private_context );
+      found_camera = tryOpenCamera(i, param_key, param_value);
+    }
+
+    if (!found_camera)
+    {
+      ROS_FATAL("photo_node: Could not find any camera.");
+      gp_context_unref(private_context);
       private_nh.shutdown();
       return;
     }
@@ -144,6 +159,67 @@ public:
     photo_mutex_.unlock();
     return error_code;
   }
+
+private:
+  bool tryOpenCamera(int camera_index, std::string param_key, std::string param_value, int tries = 20)
+  {
+    for (int i = 0; i < tries; i++)
+    {
+      // Try to open the camera a couple of times
+      try
+      {
+        return openCamera(camera_index, param_key, param_value);
+      }
+      catch (...)
+      {
+        // Sleep for a random time to prevent deadlocks
+        unsigned int msec = 100 + (rand() % 300);
+        usleep(msec * 1000);
+      }
+    }
+    ROS_ERROR_STREAM("Failed to open camera " << camera_index << " after " << tries << " tries.");
+    return false;
+  }
+
+  bool openCamera(int camera_index, std::string param_key, std::string param_value )
+  {
+    char * current_value = new char[256];
+    memset(current_value, 0, 256);
+    // open camera from camera list
+    if(!camera_.photo_camera_open(&camera_list_, camera_index))
+    {
+      delete[] current_value;
+      throw std::runtime_error("failed to open camera");
+    }
+
+    if (param_key.empty() || param_value.empty())
+    {
+      delete[] current_value;
+      return true;
+    }
+
+    if (!camera_.photo_camera_get_config(param_key, &current_value))
+    {
+      ROS_INFO_STREAM("Failed to get " << param_key << " on camera " << camera_index);
+      camera_.photo_camera_close();
+      delete[] current_value;
+      throw std::runtime_error("failed to get config");
+    }
+
+    ROS_INFO_STREAM("Got " << param_key << " = " << current_value << " on camera " << camera_index);
+    if (strcmp(param_value.c_str(), current_value) == 0)
+    {
+      delete[] current_value;
+      return true;
+    }
+    else
+    {
+      camera_.photo_camera_close();
+      delete[] current_value;
+      return false;
+    }
+  }
+
 };
 
 int main(int argc, char **argv)
